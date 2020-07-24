@@ -27,160 +27,104 @@ class Node:
 
 
 class LinkedList:
-    """"""
+    """Class to create the object linked list and being able to manipulate as it."""
 
     def __init__(self):
-        """"""
+        """
+        Init the head pointer to None
+        """
         self.head = None
 
-    def is_empty(self):
-        """Check if the list is empty"""
-        return self.head is None
-
-    def add(self, item):
-        """Add the item to the beginning of the list"""
-        new_node = Node(item)
-        new_node.set_next(self.head)
-        self.head = new_node
-
-    def size(self):
-        """Return the length/size of the list"""
-        count = 0
+    def traverse(self):
+        """
+        Print all the linked list elements one by one.
+        """
+        print("\n\t=== Traverse ===")
         current = self.head
-        while current is not None:
-            count += 1
+        index = 0
+        while current:
+            print("\tIndex {} = {}".format(index, current.get_data()))
+            index += 1
             current = current.get_next()
-        return count
 
-    def search(self, item):
-        """Search for item in list. If found, return True. If not found, return False"""
-        current = self.head
-        found = False
-        while current is not None and not found:
-            if current.get_data() is item:
-                found = True
-            else:
-                current = current.get_next()
-        return found
-
-    def remove(self, item):
-        """Remove item from list. If item is not found in list, raise ValueError"""
-        current = self.head
-        previous = None
-        found = False
-        while current is not None and not found:
-            if current.get_data() is item:
-                found = True
-            else:
-                previous = current
-                current = current.get_next()
-        if found:
-            if previous is None:
-                self.head = current.get_next()
-            else:
-                previous.set_next(current.get_next())
-        else:
-            raise ValueError
-            print('Value not found.')
-
-    def insert(self, position, item):
+    def insertion(self, index, value):
         """
-        Insert item at position specified. If position specified is
-        out of bounds, raise IndexError
+        Adds an element at the given index.
+        :param index: Integer with the array position to insert the value
+        :param value: Any type value to be inserted
         """
-        if position > self.size() - 1:
-            raise IndexError
-            print("Index out of bounds.")
         current = self.head
         previous = None
         pos = 0
-        if position == 0:
-            self.add(item)
+        new_node = Node(value)
+        if index == 0:
+            self.head = new_node
+            new_node.set_next(None)
         else:
-            new_node = Node(item)
-            while pos < position:
-                pos += 1
+            while current and pos < index:
                 previous = current
                 current = current.get_next()
+                pos += 1
             previous.set_next(new_node)
             new_node.set_next(current)
 
-    def index(self, item):
+    def deletion(self, index):
         """
-        Return the index where item is found.
-        If item is not found, return None.
+        Adds an element at the given index.
+        :param index: Integer with the array position to delete the value
         """
-        current = self.head
-        pos = 0
-        found = False
-        while current is not None and not found:
-            if current.get_data() is item:
-                found = True
-            else:
-                current = current.get_next()
-                pos += 1
-        if found:
-            pass
-        else:
-            pos = None
-        return pos
-
-    def pop(self, position=None):
-        """
-        If no argument is provided, return and remove the item at the head.
-        If position is provided, return and remove the item at that position.
-        If index is out of bounds, raise IndexError
-        """
-
-        if position > self.size():
-            print('Index out of bounds')
-            raise IndexError
-        current = self.head
-        if position is None:
-            ret = current.get_data()
-            self.head = current.get_next()
-        else:
-            pos = 0
-            previous = None
-            while pos < position:
-                previous = current
-                current = current.get_next()
-                pos += 1
-                ret = current.get_data()
-            previous.set_next(current.get_next())
-        print(ret)
-        return ret
-
-    def append(self, item):
-        """Append item to the end of the list"""
         current = self.head
         previous = None
-        pos = 0
-        length = self.size()
-        while pos < length:
+        count = 0
+        while current:
+            if count == index and previous:
+                previous.set_next(current.get_next())
+                del current
+                break
             previous = current
             current = current.get_next()
-            pos += 1
-        new_node = Node(item)
-        if previous is None:
-            new_node.set_next(current)
-            self.head = new_node
-        else:
-            previous.set_next(new_node)
+            count += 1
 
-    def print_list(self):
-        """Print the list"""
-        current = self.head
-        while current is not None:
-            print(current.get_data())
-            current = current.get_next()
+    def search(self, index=None, value=None):
+        """
+        Search of an element at the given index or value.
+        :param index: Integer with the array position to search
+        :param value: Any type value to be searched
+
+        :return If parameter selected is index, return the value
+                If parameter selected is value, return the index
+        """
+        if index:
+            count = 0
+            current = self.head
+            while current and count < index:
+                count += 1
+                current = current.get_next()
+            if count > 0:
+                return current.get_data()
+        elif value:
+            count = 0
+            current = self.head
+            while current:
+                if current.get_data() == value:
+                    return count
+                count += 1
+                current = current.get_next()
 
 
 if __name__ == "__main__":
     LL = LinkedList()
-    LL.add('l')
-    LL.add('H')
-    LL.insert(1, 'e')
-    LL.append('l')
-    LL.append('o')
-    LL.print_list()
+    LL.insertion(0, 'H')
+    LL.insertion(1, 'e')
+    LL.insertion(2, 'l')
+    LL.insertion(3, 'l')
+    LL.insertion(4, 'o')
+    LL.traverse()
+    LL.deletion(1)
+    LL.deletion(3)
+    LL.traverse()
+    LL.insertion(1, 'e')
+    LL.insertion(4, 'o')
+    LL.traverse()
+    print("\n\tIndex 4 value: {}".format(LL.search(index=4)))
+    print("\tValue 'o' in index: {}".format(LL.search(value='o')))
