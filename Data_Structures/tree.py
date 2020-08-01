@@ -2,8 +2,10 @@
 
 
 class Node:
+    """Basic structure for a Tree"""
     def __init__(self, data=None):
-        """"""
+        """Create the basics elements from the Node
+        :param data: Value to store in the Node"""
         self.left_child = None
         self.right_child = None
         self.data = data
@@ -14,7 +16,7 @@ class Tree:
 
     def __init__(self):
         """
-        Init the root node
+        Create the root node
         """
         self.root = None
 
@@ -51,16 +53,26 @@ class Tree:
                     parent_node.right_child = temp_node
                     return True
 
-    def pop(self):
+    def search(self, data):
         """
-        Returns True or False depending if there are no more elements in the tree
-        :return Boolean that says if the operation o 'push' was possible or not.
+        Search of an element at the given index or value.
+        :param data: Any type value to be searched
+
+        :return the Node that has that data
         """
-        if self._is_empty():
-            return False
-        self.tree[self.top] = None
-        self.top -= 1
-        return True
+        if self.root:
+            current_node = self.root
+            while current_node.data != data:
+                # Go to left tree
+                if data < current_node.data:
+                    current_node = current_node.left_child
+                # Go to right tree
+                else:
+                    current_node = current_node.right_child
+
+                if current_node is None:
+                    return None
+            return current_node
 
     def traversal(self, root):
         """"""
@@ -88,3 +100,5 @@ if __name__ == "__main__":
     tree.insert('l')
     tree.insert('o')
     tree.traverse()
+    searched_node = tree.search('e')
+    print(searched_node.data)
